@@ -19,9 +19,11 @@
   "homepage": "https://github.com/AJRP1718/AJRP1718#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "bower": "^1.8.2",
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "helmet": "^3.9.0",
+    "mongoose": "^4.13.5",
     "path": "^0.12.7"
   }
 }
