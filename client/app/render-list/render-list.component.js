@@ -3,7 +3,7 @@
 angular
       .module("renderList")
       .component("renderList", {
-            templateUrl: 'js/render-list/render-list.template.html',
+            templateUrl: 'app/render-list/render-list.template.html',
             controller: ["$scope", "$http", "$state", function ($scope, $http, $state) {
                   console.log("Render List Controller initialized");
 
@@ -39,7 +39,15 @@ angular
                         if (!model && !view && !ctrl) {
                               $state.go("uis");
                         } else {
-                              $state.go("uis.render", { "model": model, "view": view, "ctrl": ctrl });
+                              $http.get(baseURL+"/"+model+"/"+view+"/"+ctrl)
+                                    .then(function(response){
+                                          $scope.myValue=false;
+                                          $state.go("uis.render", { "model": model, "view": view, "ctrl": ctrl });
+                                    },function(err){
+                                          $scope.myValue=true;
+                                          $scope.error=err.status+" "+err.statusText;
+                                          $state.go("uis");
+                                    });
                         }
                   }
             }]

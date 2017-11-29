@@ -1,13 +1,11 @@
 <br/>
-<h4>Render models</h4>
-<br />
+<h4>Add Model</h4>
 <!-- Error message -->
 <div class="row">
     <div class="col s12 center-align">
         <div ng-hide="!myValue" class="card-panel #f44336 red z-depth-0" ng-model="error">{{error}}</div>
     </div>
 </div>
-<br />
 <table class="striped">
     <thead>
         <tr class="#42a5f5 blue lighten-1 z-depth-0">
@@ -20,20 +18,18 @@
     <tbody>
         <tr class="white z-depth-0">
             <td>
-                <select material-select watch ng-model="model" ng-options="m for m in modellist" ng-change="models(model)">
-                    <option value=""></option>
-                </select>
+                <input type="text"/>
             </td>
             <td>
-                <input type="text" ng-model="view" disabled/>
+                <input type="text" />
             </td>
             <td>
-                <input type="text" ng-model="ctrl" disabled/>
+                <input type="text" />
             </td>
             <td class="center">
-                <a tooltipped class="#4caf50 green btn-floating btn-large waves-effect waves-light" ng-click="checkState(model,view,ctrl)"
-                    data-position="top" data-delay="50" data-tooltip="Render!">
-                    <i class="material-icons">send</i>
+                <a tooltipped class="btn-floating btn-large waves-effect waves-light blue" data-position="top" data-delay="50"
+                    data-tooltip="Add new template!">
+                    <i class="material-icons">add</i>
                 </a>
             </td>
         </tr>
@@ -41,4 +37,4 @@
 </table>
 <br />
 <br />
-<ui-view></ui-view>
+<a ui-sref="uis">Back</a>

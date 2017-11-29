@@ -25,7 +25,7 @@ mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://test:test@ds159344.mlab.com:59344/tfg1718-arp',{ useMongoClient: true });
 console.log('Mongoose and MongoDB are connected');
 
-app.use('/', express.static(__dirname +  '/../public'));
+app.use('/', express.static(__dirname +  '/../client'));
 // Start the app by listening on the default
 // Heroku port
 app.listen(port, () => {

@@ -71,21 +71,84 @@ module.exports = {
             });
         }
     },
-    //POST over a collection
+    //POST a single resource
     post: function (request, response, next) {
         var newData = request.body;
-        Uis.collection.insert(newData, {
-            ordered: true
-        }, function (err) {
-            if (err) {
-                response.status(504); //gateway timeout
-                response.end(err);
+        if (!newData) {
+            console.log("WARNING: New POST request to /spain-births/ without birth, sending 400...");
+            response.sendStatus(400); // bad request  
+        } else {
+            console.log(newData.options);
+            console.log("INFO: New POST request to /uis/ with body: " + JSON.stringify(newData, 2, null));
+            if (newData.uid && newData.options &&
+                newData.uid != undefined && newData.options != undefined &&
+                isNaN(newData.uid) && isNaN(newData.options) &&
+                Object.keys(newData).length == 2) {
+                if (newData.options[0].view && newData.options[0].ctrl &&
+                    newData.options[0].view != undefined && newData.options[0].ctrl != undefined &&
+                    isNaN(newData.options[0].view) && isNaN(newData.options[0].ctrl) &&
+                    Object.keys(newData.options[0]).length == 2) {
+                    Uis.find({
+                        "uid": newData.uid
+                    }, function (err, data) {
+                        if (err) {
+                            console.error('WARNING: Error getting data from DB');
+                            response.sendStatus(500); // internal server error
+                        } else {
+                            var dataBeforeInsertion = data.filter((result) => {
+                                return (result.uid.localeCompare(newData.uid, "en", {
+                                    'sensitivity': 'base'
+                                }) === 0);
+                            });
+                            if (dataBeforeInsertion.length > 0) {
+                                console.log("WARNING: The data " + JSON.stringify(newData, 2, null) + " already exist, sending 409...");
+                                response.sendStatus(409); // conflict
+                            } else {
+                                Uis.collection.insert(newData, {
+                                    ordered: true
+                                }, function (err) {
+                                    if (err) {
+                                        response.status(504); //gateway timeout
+                                        response.end(err);
+                                    } else {
+                                        console.log("INFO: Adding data " + JSON.stringify(newData, 2, null));
+                                        response.sendStatus(201); // created
+                                        response.end();
+                                    }
+                                });
+                            }
+                        }
+                    })
+                } else {
+                    console.log("WARNING: The data " + JSON.stringify(newData, 2, null) + " is not well-formed, sending 422...");
+                    response.sendStatus(422); // unprocessable entity                    
+                }
             } else {
-                console.log("INFO: Adding data " + JSON.stringify(newData, 2, null));
-                response.sendStatus(201); // created
-                response.end();
+                console.log("WARNING: The data " + JSON.stringify(newData, 2, null) + " is not well-formed, sending 422...");
+                response.sendStatus(422); // unprocessable entity
             }
-        });
+        }
     },
+    //POST Model
+    postModel: function (request, response, next) {
+        var model = request.params.model;
+        console.log("WARNING: New POST request to /uis/" + model + ", sending 405...");
+        response.sendStatus(405); // method not allowed
+    },
+    //POST Model and View
+    postMV: function (request, response, next) {
+        var model = request.params.model;
+        var view = request.params.view;
+        console.log("WARNING: New POST request to /uis/" + model + "/" + view + ", sending 405...");
+        response.sendStatus(405); // method not allowed
+    },
+    //POST Model, View and Ctrl
+    postMVC: function (request, response, next) {
+        var model = request.params.model;
+        var view = request.params.view;
+        var ctrl = request.params.ctrl;
+        console.log("WARNING: New POST request to /uis/" + model + "/" + view + "/" + ctrl + ", sending 405...");
+        response.sendStatus(405); // method not allowed
+    }
 
 }
