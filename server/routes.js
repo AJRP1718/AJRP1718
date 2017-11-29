@@ -16,5 +16,6 @@ router.get('/', function (req, res) {
 });
 
 router.get(baseApiUrl,uis.get);
-router.get(baseApiUrl+"/:uid/:view/:ctrl", uis.getData);
+router.get(baseApiUrl+"/:uid",uis.getUid);
+router.get(baseApiUrl+"/:uid/:view/:ctrl", uis.getMVC);
 router.post(baseApiUrl, uis.post);

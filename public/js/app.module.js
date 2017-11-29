@@ -1,6 +1,8 @@
 'use strict'
 
 angular.module('renderApp', [
+    'navbar',
     'renderList',
-    'ngRoute'
+    'ui.router',
+    'ui.materialize'
     ]);

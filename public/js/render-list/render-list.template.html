@@ -1,3 +1,5 @@
+<br/>
+<h4>Render models</h4>
 <br />
 <!-- Error message -->
 <div class="row">
@@ -5,27 +7,38 @@
         <div ng-hide="!myValue" class="card-panel #f44336 red z-depth-0" ng-model="error">{{error}}</div>
     </div>
 </div>
-<br/>
+<br />
 <table class="striped">
     <thead>
         <tr class="#42a5f5 blue lighten-1 z-depth-0">
-            <td>Model</td>
-            <td>View</td>
-            <td>Controller</td>
+            <td class="center-align white-text centered">Model</td>
+            <td class="center-align white-text centered">View</td>
+            <td class="center-align white-text centered">Controller</td>
+            <td class="center-align white-text centered">Actions</td>
         </tr>
     </thead>
     <tbody>
         <tr class="white z-depth-0">
             <td>
-                <input type="text" ng-model="model" placeholder="test" />
+                <select material-select watch ng-model="model" ng-options="m for m in modellist" ng-change="models(model)">
+                    <option value=""></option>
+                </select>
             </td>
             <td>
-                <input type="text" ng-model="view" placeholder="prueba.template.html" />
+                <input type="text" ng-model="view" disabled/>
             </td>
             <td>
-                <input type="text" ng-model="ctrl" placeholder="prueba.component.js" />
+                <input type="text" ng-model="ctrl" disabled/>
+            </td>
+            <td class="center">
+                <a tooltipped class="#4caf50 green btn-floating btn-large waves-effect waves-light" ng-click="checkState(model,view,ctrl)"
+                    data-position="top" data-delay="50" data-tooltip="Render!">
+                    <i class="material-icons">send</i>
+                </a>
             </td>
         </tr>
     </tbody>
 </table>
-<a class="btn" href="#!/api/v1/uis/{{model}}/{{view}}/{{ctrl}}">Render</a>
+<br />
+<br />
+<ui-view></ui-view>

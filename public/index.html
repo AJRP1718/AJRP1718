@@ -2,25 +2,30 @@
 <html ng-app="renderApp">
 
 <head>
+  <title>AJRP1718</title>
   <link rel="stylesheet" href="bower_components/materialize/dist/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
   <script type="text/javascript" src="bower_components/materialize/dist/js/materialize.min.js"></script>
   <script type="text/javascript" src="bower_components/angular/angular.js"></script>
-  <script src="bower_components/angular-route/angular-route.js"></script>
-  <script src="js/app.module.js"></script>
-  <script src="js/app.config.js"></script>
-  <script src="js/render-list/render-list.module.js"></script>
-  <script src="js/render-list/render-list.component.js"></script>
-  <script src="js/test/test.module.js"></script>
-  <script src="js/test/test.component.js"></script>  
-  <script src="js/test2/test2.module.js"></script>
-  <script src="js/test2/test2.component.js"></script>  
+  <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
+  <script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+  <script type="text/javascript" src="bower_components/angular-materialize/src/angular-materialize.js"></script>
+  <script type="text/javascript" src="js/app.module.js"></script>
+  <script type="text/javascript" src="js/app.config.js"></script>
+  <script type="text/javascript" src="js/navbar/navbar.module.js"></script>
+  <script type="text/javascript" src="js/navbar/navbar.component.js"></script>
+  <link rel="stylesheet" href="js/navbar/navbar.stylesheet.css">
+  <script type="text/javascript" src="js/render-list/render-list.module.js"></script>
+  <script type="text/javascript" src="js/render-list/render-list.component.js"></script>
+  <script type="text/javascript" src="js/test/test.controller.js"></script>
+  <script type="text/javascript" src="js/test2/test2.controller.js"></script>  
   
 </head>
 
-<body>
+<body class="container #e3f2fd blue lighten-5">
+  <navbar></navbar>
   <render-list></render-list>
-  <div ng-view></div>
 </body>
 
 </html>

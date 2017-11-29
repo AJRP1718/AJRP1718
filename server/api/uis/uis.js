@@ -17,7 +17,32 @@ module.exports = {
             }
         });
     },
-    getData: function (request, response, next) {
+    //GET multiple resource (?)
+    getUid: function (request, response, next) {
+        var uid = request.params.uid;
+        if (!uid) {
+            console.log("WARNING: New GET request to /uis/" + uid + " without uid, sending 400...");
+            response.sendStatus(400); // bad request           
+        }
+        Uis.find({
+            "uid": uid
+        }, function (err, data) {
+            if (err) {
+                console.error('WARNING: Error getting data from DB');
+                response.sendStatus(500); // internal server error                
+            } else {
+                if (data.length > 0) {
+                    console.log("INFO: Sending contact: " + JSON.stringify(data, 2, null));
+                    response.send(data);
+                } else {
+                    console.log("WARNING: There are not any data with that params");
+                    response.sendStatus(404); // not found
+                }
+            }
+        })
+    },
+    //GET a single resource
+    getMVC: function (request, response, next) {
         var uid = request.params.uid;
         var view = request.params.view;
         var ctrl = request.params.ctrl;
