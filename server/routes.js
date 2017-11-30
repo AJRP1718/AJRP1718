@@ -19,6 +19,7 @@ router.get(baseApiUrl,uis.get);
 router.get(baseApiUrl+"/:uid",uis.getUid);
 router.get(baseApiUrl+"/:uid/:view/:ctrl", uis.getMVC);
 router.post(baseApiUrl, uis.post);
-router.post(baseApiUrl+"/:model",uis.postModel)
-router.post(baseApiUrl+"/:model/:view",uis.postMV);
-router.post(baseApiUrl+"/:model/:view/:ctrl",uis.postMVC);
+router.post(baseApiUrl+"/:uid",uis.postModel)
+router.post(baseApiUrl+"/:uid/:view",uis.postMV);
+router.post(baseApiUrl+"/:uid/:view/:ctrl",uis.postMVC);
+router.delete(baseApiUrl+"/:uid/:view/:ctrl",uis.deleteMVC);

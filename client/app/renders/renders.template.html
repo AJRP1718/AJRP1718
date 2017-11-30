@@ -1,0 +1,23 @@
+<br />
+<h4>Renders List</h4>
+<br />
+<table class="striped">
+    <thead>
+        <tr class="#42a5f5 blue lighten-1 z-depth-0">
+            <th class="center-align white-text centered">Model</th>
+            <th class="center-align white-text centered">View</th>
+            <th class="center-align white-text centered">Controller</th>
+            <th class="center-align white-text centered" colspan="2">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="white z-depth-0" ng-repeat="ui in uis">
+            <td class="center">{{ui.uid}}</td>
+            <td class="center">{{ui.options[0].view}}</td>
+            <td class="center">{{ui.options[0].ctrl}}</td>
+            <td class="center">
+                <renders-delete></renders-delete>
+            </td>
+        </tr>
+    </tbody>
+</table>

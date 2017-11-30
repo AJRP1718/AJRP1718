@@ -18,17 +18,17 @@
     <tbody>
         <tr class="white z-depth-0">
             <td>
-                <input type="text"/>
+                <input type="text" ng-model="model" placeholder="test" />
             </td>
             <td>
-                <input type="text" />
+                <input type="text" ng-model="view" placeholder="test.template.html" />
             </td>
             <td>
-                <input type="text" />
+                <input type="text" ng-model="ctrl" placeholder="test.component.js" />
             </td>
             <td class="center">
-                <a tooltipped class="btn-floating btn-large waves-effect waves-light blue" data-position="top" data-delay="50"
-                    data-tooltip="Add new template!">
+                <a tooltipped class="btn-floating btn-large waves-effect waves-light blue" ng-click="add(model,view,ctrl)"
+                data-position="top" data-delay="50" data-tooltip="Add new template!">
                     <i class="material-icons">add</i>
                 </a>
             </td>

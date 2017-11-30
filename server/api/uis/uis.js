@@ -104,18 +104,25 @@ module.exports = {
                                 console.log("WARNING: The data " + JSON.stringify(newData, 2, null) + " already exist, sending 409...");
                                 response.sendStatus(409); // conflict
                             } else {
-                                Uis.collection.insert(newData, {
-                                    ordered: true
-                                }, function (err) {
-                                    if (err) {
-                                        response.status(504); //gateway timeout
-                                        response.end(err);
-                                    } else {
-                                        console.log("INFO: Adding data " + JSON.stringify(newData, 2, null));
-                                        response.sendStatus(201); // created
-                                        response.end();
-                                    }
-                                });
+                                const dirPath = './client/app/uis/' + newData.uid;
+                                if (fs.existsSync(dirPath)) {
+                                    console.log("WARNING: The folder " + newData.uid + " already exists");
+                                    response.sendStatus(409); // conflict
+                                } else {
+                                    fs.mkdirSync(dirPath);
+                                    Uis.collection.insert(newData, {
+                                        ordered: true
+                                    }, function (err) {
+                                        if (err) {
+                                            response.status(504); //gateway timeout
+                                            response.end(err);
+                                        } else {
+                                            console.log("INFO: Adding data " + JSON.stringify(newData, 2, null));
+                                            response.sendStatus(201); // created
+                                            response.end();
+                                        }
+                                    });
+                                }
                             }
                         }
                     })
@@ -131,24 +138,61 @@ module.exports = {
     },
     //POST Model
     postModel: function (request, response, next) {
-        var model = request.params.model;
-        console.log("WARNING: New POST request to /uis/" + model + ", sending 405...");
+        var uid = request.params.model;
+        console.log("WARNING: New POST request to /uis/" + uid + ", sending 405...");
         response.sendStatus(405); // method not allowed
     },
     //POST Model and View
     postMV: function (request, response, next) {
-        var model = request.params.model;
+        var uid = request.params.uid;
         var view = request.params.view;
-        console.log("WARNING: New POST request to /uis/" + model + "/" + view + ", sending 405...");
+        console.log("WARNING: New POST request to /uis/" + uid + "/" + view + ", sending 405...");
         response.sendStatus(405); // method not allowed
     },
     //POST Model, View and Ctrl
     postMVC: function (request, response, next) {
-        var model = request.params.model;
+        var uid = request.params.uid;
         var view = request.params.view;
         var ctrl = request.params.ctrl;
-        console.log("WARNING: New POST request to /uis/" + model + "/" + view + "/" + ctrl + ", sending 405...");
+        console.log("WARNING: New POST request to /uis/" + uid + "/" + view + "/" + ctrl + ", sending 405...");
         response.sendStatus(405); // method not allowed
+    },
+    //DELETE over a single resource
+    deleteMVC: function (request, response, next) {
+        var uid = request.params.uid;
+        var view = request.params.view;
+        var ctrl = request.params.ctrl;
+        if (!uid && !view && !ctrl) {
+            console.log("WARNING: New DELETE request to /uis/" + uid + "/" + view + "/" + ctrl + " without params, sending 400...");
+            response.sendStatus(400); // bad request
+        } else {
+            console.log("INFO: New DELETE request to /uis/" + uid + "/" + view + "/" + ctrl);
+            const dirPath = './client/app/uis/' + uid;
+            Uis.find({
+                "uid": uid,
+                "options.view": view,
+                "options.ctrl": ctrl
+            }, function (err) {
+                if (err) {
+                    console.error('WARNING: Error removing data from DB');
+                    response.sendStatus(500); // internal server error
+                    request.end();
+                }
+            }).remove(function (err) {
+                if (err) {
+                    console.log("WARNING: There are no data to delete");
+                    response.sendStatus(404); // not found
+                    response.end(err);
+                } else {
+                    fs.rmdirSync(dirPath);
+                    console.log("INFO: Data removed: " + uid + " " + view + " " + ctrl);
+                    console.log("INFO: The data with model: " + uid + ", view: " + view + ", ctrl: " + ctrl + " has been succesfully deleted, sending 204...");
+                    response.sendStatus(204); // no content
+                    response.end();
+                }
+            });
+        }
     }
+
 
 }
