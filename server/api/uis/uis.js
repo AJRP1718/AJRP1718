@@ -3,7 +3,10 @@ require('mongoose').model('uis');
 var mongoose = require('mongoose');
 var Uis = mongoose.model('uis');
 var path = require('path');
-var fs = require("fs");
+var fs = require('fs');
+var fsextra = require('fs-extra');
+var shell = require('shelljs');
+const fileUpload = require('express-fileupload');
 module.exports = {
     // GET a collection
     get: function (request, response, next) {
@@ -104,25 +107,19 @@ module.exports = {
                                 console.log("WARNING: The data " + JSON.stringify(newData, 2, null) + " already exist, sending 409...");
                                 response.sendStatus(409); // conflict
                             } else {
-                                const dirPath = './client/app/uis/' + newData.uid;
-                                if (fs.existsSync(dirPath)) {
-                                    console.log("WARNING: The folder " + newData.uid + " already exists");
-                                    response.sendStatus(409); // conflict
-                                } else {
-                                    fs.mkdirSync(dirPath);
-                                    Uis.collection.insert(newData, {
-                                        ordered: true
-                                    }, function (err) {
-                                        if (err) {
-                                            response.status(504); //gateway timeout
-                                            response.end(err);
-                                        } else {
-                                            console.log("INFO: Adding data " + JSON.stringify(newData, 2, null));
-                                            response.sendStatus(201); // created
-                                            response.end();
-                                        }
-                                    });
-                                }
+                                Uis.collection.insert(newData, {
+                                    ordered: true
+                                }, function (err) {
+                                    if (err) {
+                                        response.status(504); //gateway timeout
+                                        response.end(err);
+                                    } else {
+                                        console.log("INFO: Adding data " + JSON.stringify(newData, 2, null));
+                                        response.sendStatus(201); // created
+                                        response.end();
+                                    }
+                                });
+
                             }
                         }
                     })
@@ -135,6 +132,64 @@ module.exports = {
                 response.sendStatus(422); // unprocessable entity
             }
         }
+    },
+    postFiles: function (request, response, next) {
+        var view = request.files.view;
+        if (!view) {
+            console.log("WARNING: No view html uploaded")
+            return response.status(400);
+        }
+        var ctrl = request.files.ctrl;
+        if (!ctrl) {
+            console.log("WARNING: No controller uploaded");
+            return response.status(400);
+        }
+
+        if (view.name.split('.')[0] != ctrl.name.split('.')[0]) {
+            console.log("WARNING: It should be " + view.name.split('.')[0] + ".controller.js");
+            return response.status(400);
+        }
+        if (view.name.split('.')[1] + "." + view.name.split('.')[2] != "template.html") {
+            console.log("WARNING: It should be " + view.name.split('.')[0] + ".template.html");
+            return response.status(400);
+        }
+        if (ctrl.name.split('.')[1] + "." + ctrl.name.split('.')[2] != "controller.js") {
+            console.log("WARNING: It should be " + ctrl.name.split('.')[0] + ".controller.js");
+            return response.status(400);
+        }
+        var model = view.name.split('.')[0];
+        console.log("Uploading " + model + '/' + view.name + '/' + ctrl.name);
+        var dirPath = './client/app/uis/' + model;
+        var templatePath = './client/app/uis/' + model + '/' + view.name;
+        var controllerPath = './client/app/uis/' + model + '/' + ctrl.name;
+        var indexPath = './client/index.html';
+        var lines=ctrl.data.toString();
+        if(!lines.includes(".module('renderApp')")){
+            console.log("WARNING: It should be .module('renderApp')");
+            return response.status(400);
+        }
+        if(!lines.includes(".controller('"+model+"',")){
+            console.log("WARNING: It should be .controller('"+model+"', function ...");
+            return response.status(400);
+        }
+        fsextra.ensureDir(dirPath)
+            .catch(err => {
+                console.error(err)
+            })
+        view.mv(templatePath, function (err) {
+            if (err)
+                return response.status(500).send(err);
+        });
+
+        ctrl.mv(controllerPath, function (err) {
+            if (err)
+                return response.status(500).send(err);
+        });
+        
+        shell.sed('-i', '</html>', '<script type="text/javascript" src="app/uis/' + model + '/' + ctrl.name + '"></script>\n</html>', indexPath);    
+        
+        response.sendStatus(201);
+        response.end();
     },
     //POST Model
     postModel: function (request, response, next) {
@@ -184,7 +239,9 @@ module.exports = {
                     response.sendStatus(404); // not found
                     response.end(err);
                 } else {
-                    fs.rmdirSync(dirPath);
+                    fsextra.remove(dirPath);
+                    var indexPath = './client/index.html';
+                    shell.sed('-i', '<script type="text/javascript" src="app/uis/' + uid + '/' + ctrl + '"></script>', '', indexPath);                    
                     console.log("INFO: Data removed: " + uid + " " + view + " " + ctrl);
                     console.log("INFO: The data with model: " + uid + ", view: " + view + ", ctrl: " + ctrl + " has been succesfully deleted, sending 204...");
                     response.sendStatus(204); // no content

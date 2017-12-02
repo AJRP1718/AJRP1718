@@ -11,7 +11,13 @@ angular
                   var http = window.location.protocol;
                   var baseURL = "/api/v1/uis";
                   $state.go("uis");
-                  $scope.myValue=false;
+                  window.onload = function () {
+                        if (!window.location.hash) {
+                              window.location = window.location + '#loaded';
+                              window.location.reload();
+                        }
+                  }
+                  $scope.myValue = false;
                   $http.get(baseURL)
                         .then(function (response) {
                               var modellist = [];
@@ -20,7 +26,7 @@ angular
                               }
                               $scope.modellist = modellist;
                         })
-                  
+
                   $scope.models = function (model) {
                         if (!model) {
                               delete $scope.view;
@@ -39,13 +45,13 @@ angular
                         if (!model && !view && !ctrl) {
                               $state.go("uis");
                         } else {
-                              $http.get(baseURL+"/"+model+"/"+view+"/"+ctrl)
-                                    .then(function(response){
-                                          $scope.myValue=false;
+                              $http.get(baseURL + "/" + model + "/" + view + "/" + ctrl)
+                                    .then(function (response) {
+                                          $scope.myValue = false;
                                           $state.go("uis.render", { "model": model, "view": view, "ctrl": ctrl });
-                                    },function(err){
-                                          $scope.myValue=true;
-                                          $scope.error=err.status+" "+err.statusText;
+                                    }, function (err) {
+                                          $scope.myValue = true;
+                                          $scope.error = err.status + " " + err.statusText;
                                           $state.go("uis");
                                     });
                         }

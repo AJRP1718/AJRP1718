@@ -9,16 +9,17 @@ var cors = require("cors");
 var port = (process.env.PORT || 8080);
 var routes = require("./routes.js");
 var mongoose = require('mongoose');
-var baseApiURL="/api/v1";
+const fileUpload = require('express-fileupload');
 
 app.use(cors()); // allow Cross-Origin Resource Sharing 
 app.use(bodyParser.json()); //use default json enconding/decoding
 app.use(bodyParser.text());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(helmet()); //improve security
+app.use(fileUpload());
 
 // For all GET requests, send back index.html
-app.use(baseApiURL,routes);
+app.use("/",routes);
 
 // Connect to MongoDB using Mongoose
 mongoose.Promise = global.Promise;
