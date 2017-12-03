@@ -26,6 +26,7 @@
     "helmet": "^3.9.0",
     "mongoose": "^4.13.5",
     "path": "^0.12.7",
-    "shelljs": "^0.7.8"
+    "shelljs": "^0.7.8",
+    "express-fileupload": "^0.3.0"
   }
 }
