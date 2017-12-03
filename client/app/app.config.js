@@ -15,6 +15,10 @@ angular.
           url: '/renders',
           component: 'renders'
         })
+        .state('edit',{
+          url: '/renders/:model/:view/:ctrl',
+          component: 'rendersEdit'
+        })
         .state('uis', {
           url: '/api/v1/uis',
           component: 'renderList'

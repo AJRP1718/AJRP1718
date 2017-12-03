@@ -11,12 +11,17 @@ angular
                   var http = window.location.protocol;
                   var baseURL = "/api/v1/uis";
                   $state.go("uis");
-                  window.onload = function () {
-                        if (!window.location.hash) {
-                              window.location = window.location + '#loaded';
-                              window.location.reload();
+                  (function () {
+                        if (window.localStorage) {
+                              if (!localStorage.getItem('firstLoad')) {
+                                    localStorage['firstLoad'] = true;
+                                    window.location.reload();
+                              }
+                              else
+                                    localStorage.removeItem('firstLoad');
                         }
-                  }
+                  })();
+                  
                   $scope.myValue = false;
                   $http.get(baseURL)
                         .then(function (response) {

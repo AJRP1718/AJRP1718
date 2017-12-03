@@ -23,4 +23,5 @@ router.post(baseApiUrl, uis.post);
 router.post(baseApiUrl+"/:uid",uis.postModel)
 router.post(baseApiUrl+"/:uid/:view",uis.postMV);
 router.post(baseApiUrl+"/:uid/:view/:ctrl",uis.postMVC);
+router.post("/uploadEditFiles",uis.putFiles);
 router.delete(baseApiUrl+"/:uid/:view/:ctrl",uis.deleteMVC);

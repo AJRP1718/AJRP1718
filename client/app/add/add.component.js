@@ -18,13 +18,13 @@ angular
                               $scope.error = "400 Bad Request";
                         } else if (viewFile.name.split('.')[0] != ctrlFile.name.split('.')[0]) {
                               $scope.myValue = true;
-                              $scope.error = "It should be " + viewFile.name.split('.')[0] + ".controller.js";
+                              $scope.error = "It must be " + viewFile.name.split('.')[0] + ".controller.js";
                         } else if (viewFile.name.split('.')[1] + "." + viewFile.name.split('.')[2] != "template.html") {
                               $scope.myValue = true;
-                              $scope.error = "It should be " + viewFile.name.split('.')[0] + ".template.html";
+                              $scope.error = "It must be " + viewFile.name.split('.')[0] + ".template.html";
                         } else if (ctrlFile.name.split('.')[1] + "." + ctrlFile.name.split('.')[2] != "controller.js") {
                               $scope.myValue = true;
-                              $scope.error = "It should be " + ctrlFile.name.split('.')[0] + ".controller.js";
+                              $scope.error = "It must be " + ctrlFile.name.split('.')[0] + ".controller.js";
                         } else {
                               var model = viewFile.name.split('.')[0];
                               var data = '{"uid":"' + model + '","options":[{ "view":"' + viewFile.name + '","ctrl":"' + ctrlFile.name + '"}]}';
@@ -34,19 +34,19 @@ angular
                                     var lines = text.split("\n").toString();
                                     if (!lines.includes(".module('renderApp')")) {
                                           $scope.myValue = true;
-                                          $scope.error = ctrlFile.name+" should include .module('renderApp')";
+                                          $scope.error = ctrlFile.name+" must include .module('renderApp')";
                                           $scope.$apply();
                                     }
                                     else if (!lines.includes(".controller('" + model + "',")) {
                                           $scope.myValue = true;
-                                          $scope.error = ctrlFile.name+" should include .controller('" + model + "', function...";
+                                          $scope.error = ctrlFile.name+" must include .controller('" + model + "', function...";
                                           $scope.$apply();
                                     } else {
                                           $http
                                                 .post(baseURL, data)
                                                 .then(function (response) {
                                                       $scope.myValue = false;
-                                                      window.location.href="#!/api/v1/uis";
+                                                      $state.go("uis");
                                                 }, function (err) {
                                                       if (err.status != 201) {
                                                             $scope.myValue = true;

@@ -146,15 +146,15 @@ module.exports = {
         }
 
         if (view.name.split('.')[0] != ctrl.name.split('.')[0]) {
-            console.log("WARNING: It should be " + view.name.split('.')[0] + ".controller.js");
+            console.log("WARNING: It must be " + view.name.split('.')[0] + ".controller.js");
             return response.status(400);
         }
         if (view.name.split('.')[1] + "." + view.name.split('.')[2] != "template.html") {
-            console.log("WARNING: It should be " + view.name.split('.')[0] + ".template.html");
+            console.log("WARNING: It must be " + view.name.split('.')[0] + ".template.html");
             return response.status(400);
         }
         if (ctrl.name.split('.')[1] + "." + ctrl.name.split('.')[2] != "controller.js") {
-            console.log("WARNING: It should be " + ctrl.name.split('.')[0] + ".controller.js");
+            console.log("WARNING: It must be " + ctrl.name.split('.')[0] + ".controller.js");
             return response.status(400);
         }
         var model = view.name.split('.')[0];
@@ -164,12 +164,16 @@ module.exports = {
         var controllerPath = './client/app/uis/' + model + '/' + ctrl.name;
         var indexPath = './client/index.html';
         var lines=ctrl.data.toString();
+        if(fs.existsSync(dirPath)){
+            console.log("WARNING: "+dirPath+" already exists, sending 409...");
+            return response.sendStatus(409);
+        }
         if(!lines.includes(".module('renderApp')")){
-            console.log("WARNING: It should be .module('renderApp')");
+            console.log("WARNING: It must be .module('renderApp')");
             return response.status(400);
         }
         if(!lines.includes(".controller('"+model+"',")){
-            console.log("WARNING: It should be .controller('"+model+"', function ...");
+            console.log("WARNING: It must be .controller('"+model+"', function ...");
             return response.status(400);
         }
         fsextra.ensureDir(dirPath)
@@ -211,6 +215,56 @@ module.exports = {
         var ctrl = request.params.ctrl;
         console.log("WARNING: New POST request to /uis/" + uid + "/" + view + "/" + ctrl + ", sending 405...");
         response.sendStatus(405); // method not allowed
+    },
+    putFiles: function(request, response, next){
+        var view = request.files.view;
+        if (!view) {
+            console.log("WARNING: No view html uploaded")
+            return response.status(400);
+        }
+        var ctrl = request.files.ctrl;
+        if (!ctrl) {
+            console.log("WARNING: No controller uploaded");
+            return response.status(400);
+        }
+
+        if (view.name.split('.')[0] != ctrl.name.split('.')[0]) {
+            console.log("WARNING: It must be " + view.name.split('.')[0] + ".controller.js");
+            return response.status(400);
+        }
+        if (view.name.split('.')[1] + "." + view.name.split('.')[2] != "template.html") {
+            console.log("WARNING: It must be " + view.name.split('.')[0] + ".template.html");
+            return response.status(400);
+        }
+        if (ctrl.name.split('.')[1] + "." + ctrl.name.split('.')[2] != "controller.js") {
+            console.log("WARNING: It must be " + ctrl.name.split('.')[0] + ".controller.js");
+            return response.status(400);
+        }
+        var model = view.name.split('.')[0];
+        console.log("Uploading " + model + '/' + view.name + '/' + ctrl.name);
+        var dirPath = './client/app/uis/' + model;
+        var templatePath = './client/app/uis/' + model + '/' + view.name;
+        var controllerPath = './client/app/uis/' + model + '/' + ctrl.name;
+        var lines=ctrl.data.toString();
+        if(!lines.includes(".module('renderApp')")){
+            console.log("WARNING: It must be .module('renderApp')");
+            return response.status(400);
+        }
+        if(!lines.includes(".controller('"+model+"',")){
+            console.log("WARNING: It must be .controller('"+model+"', function ...");
+            return response.status(400);
+        }        
+        view.mv(templatePath, function (err) {
+            if (err)
+                return response.status(500).send(err);
+        });
+
+        ctrl.mv(controllerPath, function (err) {
+            if (err)
+                return response.status(500).send(err);
+        });
+        response.sendStatus(201);
+        response.end();
     },
     //DELETE over a single resource
     deleteMVC: function (request, response, next) {

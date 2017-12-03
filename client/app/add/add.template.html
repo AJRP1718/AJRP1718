@@ -1,3 +1,4 @@
+<link ref="stylesheet" href="app/add/add.stylesheet.css">
 <br/>
 <h4>Add Model</h4>
 <!-- Error message -->
@@ -9,7 +10,6 @@
 <table class="striped">
     <thead>
         <tr class="#42a5f5 blue lighten-1 z-depth-0">
-            <td class="center-align white-text centered">Model</td>
             <td class="center-align white-text centered">View</td>
             <td class="center-align white-text centered">Controller</td>
             <td class="center-align white-text centered">Actions</td>
@@ -17,22 +17,37 @@
     </thead>
     <tbody>
         <tr class="white z-depth-0">
-            <td colspan="4">
+            <td colspan="3">
+                <div class="row">
                 <form ref='uploadForm' id='uploadForm' action='/uploadFiles' method='post' encType="multipart/form-data" target="hiddenFrame">
-                    <input type="file" name="view" id="viewFile" />
-                    <!--<label for="viewFile" class="tooltipped btn-floating btn-large waves-effect waves-light #9e9e9e grey" data-position="top"
-                 data-delay="50" data-tooltip="Load a .CSV!">
-                 <i class="material-icons">file_upload</i>
-             </label>
-             <input id="viewFile" type="file" materialize/>-->
-                    <input type="file" name="ctrl" id="ctrlFile" />
-                    <!--<label for="ctrlFile" class="tooltipped btn-floating btn-large waves-effect waves-light #9e9e9e grey" data-position="top"
-                 data-delay="50" data-tooltip="Load a .CSV!">
-                 <i class="material-icons">file_upload</i>
-             </label>
-             <input id="ctrlFile" type="file" materialize/>-->
-                    <input type='submit' value='Upload!' ng-click="add()" />
+                    <div class="file-field input-field col s4">
+                        <div class="btn btn-large waves-effect waves-light #9e9e9e grey">
+                            <i class="material-icons">attach_file</i>
+                            <input tooltipped type="file" name="view" id="viewFile" data-position="top" data-delay="50" data-tooltip="Attach a template.html!"
+                            />
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+                    <div class="file-field input-field col s4">
+                        <div class="btn btn-large waves-effect waves-light #9e9e9e grey">
+                            <i class="material-icons">attach_file</i>
+                            <input tooltipped type="file" name="ctrl" id="ctrlFile" data-position="top" data-delay="50" data-tooltip="Attach a controller.js!"
+                            />
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+                    <div class="col s1 offset-s1">
+                    <button tooltipped class="btn-floating btn-large waves-effect waves-light blue" type='submit' value='Upload!' ng-click="add()"
+                        data-position="top" data-delay="50" data-tooltip="Upload!">
+                        <i class="material-icons">file_upload</i>
+                    </button>
+                    </div>
                 </form>
+                </div>
             </td>
         </tr>
     </tbody>
