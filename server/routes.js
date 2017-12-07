@@ -15,6 +15,10 @@ router.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + '/../client/index.html'));
 });
 
+router.get('/callback', function (req, res) {
+    res.sendFile(path.join(__dirname + '/../client/index.html'));
+});
+
 router.get(baseApiUrl,uis.get);
 router.get(baseApiUrl+"/:uid",uis.getUid);
 router.get(baseApiUrl+"/:uid/:view/:ctrl", uis.getMVC);

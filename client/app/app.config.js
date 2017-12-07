@@ -2,20 +2,33 @@
 
 angular.
   module('renderApp').
-  config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
-    function ($stateProvider, $locationProvider, $urlRouterProvider) {
+  config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'angularAuth0Provider',
+    function ($stateProvider, $locationProvider, $urlRouterProvider, angularAuth0Provider) {
 
       $stateProvider
         .state('home', {
           url: '/',
           controller: 'HomeController',
-          templateUrl: 'app/home/home.template.html'
+          templateUrl: 'app/home/home.template.html',
+          controllerAs: 'vm'
         })
-        .state('renders',{
+        .state('profile', {
+          url: '/profile',
+          controller: 'ProfileController',
+          templateUrl: 'app/profile/profile.template.html',
+          controllerAs: 'vm'
+        })
+        .state('callback', {
+          url: '/callback',
+          controller: 'CallbackController',
+          templateUrl: 'app/callback/callback.html',
+          controllerAs: 'vm'
+        })
+        .state('renders', {
           url: '/renders',
           component: 'renders'
         })
-        .state('edit',{
+        .state('edit', {
           url: '/renders/:model/:view/:ctrl',
           component: 'rendersEdit'
         })
@@ -38,10 +51,25 @@ angular.
         .state('add', {
           url: '/add',
           component: 'add'
-        });
+        })
+
 
       $urlRouterProvider.otherwise('/');
+
+      $locationProvider.hashPrefix('');
+
+      // Initialization for the angular-auth0 library
+      angularAuth0Provider.init({
+        clientID: AUTH0_CLIENT_ID,
+        domain: AUTH0_DOMAIN,
+        responseType: 'token id_token',
+        audience: 'https://' + AUTH0_DOMAIN + '/userinfo',
+        redirectUri: AUTH0_CALLBACK_URL,
+        scope: 'openid profile'
+      });
+
       console.log("App Initialized");
+
 
     }
 

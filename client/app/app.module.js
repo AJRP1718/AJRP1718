@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module('renderApp', [
-    'navbar',
+    'auth0.auth0',
     'renderList',
     'renders',
     'rendersEdit',
