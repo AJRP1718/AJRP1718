@@ -52,6 +52,11 @@ angular.
           url: '/add',
           component: 'add'
         })
+        .state('about', {
+          url: '/about',
+          controller: 'about',
+          templateUrl: 'app/about/about.template.html'
+        })
 
 
       $urlRouterProvider.otherwise('/');
