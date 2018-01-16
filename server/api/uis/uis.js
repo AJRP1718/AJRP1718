@@ -229,15 +229,15 @@ module.exports = {
         }
 
         if (view.name.split('.')[0] != ctrl.name.split('.')[0]) {
-            console.log("WARNING: It must be " + view.name.split('.')[0] + ".controller.js");
+            console.log("WARNING: Controller file name must be " + view.name.split('.')[0] + ".controller.js");
             return response.status(400);
         }
         if (view.name.split('.')[1] + "." + view.name.split('.')[2] != "template.html") {
-            console.log("WARNING: It must be " + view.name.split('.')[0] + ".template.html");
+            console.log("WARNING: View file extension must be " + view.name.split('.')[0] + ".template.html");
             return response.status(400);
         }
         if (ctrl.name.split('.')[1] + "." + ctrl.name.split('.')[2] != "controller.js") {
-            console.log("WARNING: It must be " + ctrl.name.split('.')[0] + ".controller.js");
+            console.log("WARNING: Controller file extension must be " + ctrl.name.split('.')[0] + ".controller.js");
             return response.status(400);
         }
         var model = view.name.split('.')[0];

@@ -19,37 +19,43 @@
         <tr class="white z-depth-0">
             <td colspan="3">
                 <div class="row">
-                <form ref='uploadForm' id='uploadForm' action='/uploadFiles' method='post' encType="multipart/form-data" target="hiddenFrame">
-                    <div class="file-field input-field col s4">
-                        <div class="btn btn-large waves-effect waves-light #9e9e9e grey">
-                            <i class="material-icons">attach_file</i>
-                            <input tooltipped type="file" name="view" id="viewFile" data-position="top" data-delay="50" data-tooltip="Attach a template.html!"
-                            />
+                    <form ref='uploadForm' id='uploadForm' action='/uploadFiles' method='post' encType="multipart/form-data" target="hiddenFrame">
+                        <div class="file-field input-field col s4 offset-s1">
+                            <div class="btn waves-effect waves-light #9e9e9e grey">
+                                Select file
+                                <input tooltipped type="file" name="view" id="viewFile" data-position="top" data-delay="50" data-tooltip="Attach a template.html!"
+                                />
+                            </div>
                         </div>
-                        <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text">
+                        <div class="file-field input-field col s4">
+                            <div class="btn waves-effect waves-light #9e9e9e grey">
+                                Select file
+                                <input tooltipped type="file" name="ctrl" id="ctrlFile" data-position="top" data-delay="50" data-tooltip="Attach a controller.js!"
+                                />
+                            </div>
                         </div>
-                    </div>
-                    <div class="file-field input-field col s4">
-                        <div class="btn btn-large waves-effect waves-light #9e9e9e grey">
-                            <i class="material-icons">attach_file</i>
-                            <input tooltipped type="file" name="ctrl" id="ctrlFile" data-position="top" data-delay="50" data-tooltip="Attach a controller.js!"
-                            />
+                        <div class="col s2">
+                            <button tooltipped class="btn waves-effect waves-light blue" type='submit' value='Upload!' ng-click="add()" data-position="top"
+                                data-delay="50" data-tooltip="Upload!" style="margin-top: 20px;">
+                                Add MVC
+                            </button>
                         </div>
-                        <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text">
-                        </div>
-                    </div>
-                    <div class="col s1 offset-s1">
-                    <button tooltipped class="btn-floating btn-large waves-effect waves-light blue" type='submit' value='Upload!' ng-click="add()"
-                        data-position="top" data-delay="50" data-tooltip="Upload!">
-                        <i class="material-icons">file_upload</i>
-                    </button>
-                    </div>
-                </form>
+                    </form>
                 </div>
             </td>
         </tr>
+        <tr class="white z-depth-0">
+            <td colspan="3">
+                <div class="row">
+                    <button class="btn waves-effect waves-light blue col s4" ng-click="downloadView()">
+                        Download example.template.html
+                    </button>
+                    <button class="btn waves-effect waves-light blue col s4" ng-click="downloadCtrl()">
+                        Download example.controller.js
+                    </button>                    
+                </div>
+            </td>
+        </tr>        
     </tbody>
 </table>
 
